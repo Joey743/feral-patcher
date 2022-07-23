@@ -3,27 +3,18 @@ Set-Variable -Name "GameURL" -Value "https://download.fer.al/win64/FeralInstalle
 Set-Variable -Name "PatchURL" -Value "https://aerialworks.ddns.net/extra/emuferal/sharedassets1-online.assets"
 
 #Install Feral
-if (-not Test-Path (%LOCALAPPDATA%\WildWorks\Feral)){
-	Invoke-WebRequest -Url $GameURL -OutFile %HOMEPATH%\Downloads\FeralInstaller.exe
-	echo "Installing Fer.al client...\n Close the game when it opens."
-	Start-Process -FilePath "FeralInstaller.exe" -WorkingDirectory "%HOMEPATH%\Downloads" -Wait
+if (-not (Test-Path "$HOME\AppData\Local\Programs\WildWorks\Feral")){
+	Invoke-WebRequest -Uri $GameURL -OutFile $HOME\Downloads\FeralInstaller.exe
+	Write-Output "Installing Fer.al client..."
+	Write-Output "Close the game when it opens. It may take a minute."
+	Start-Process -Wait -FilePath "FeralInstaller.exe" -WorkingDirectory "$HOME\Downloads"
 }
 else{
-	echo "Fer.al is already installed."
+	Write-Output "Fer.al is already installed. Installing patch..."
 }
 
 #Install Patch
-Invoke-WebRequest -Url $PatchURL -OutFile %LOCALAPPDATA%\WildWorks\Feral\Data\build\Fer.al_Data\sharedassets1.assets
+Invoke-WebRequest -Uri $PatchURL -OutFile $HOME\AppData\Local\Programs\WildWorks\Feral\Data\build\Fer.al_Data\sharedassets1.assets
 
-echo "Your client is now patched and you can log in to $ServerName"
-
-
-
-
-
-
-
-
-
-
-
+Write-Output "Your client is now patched and you can log in to $ServerName"
+Read-Host -Prompt "Start Fer.al as normal from the Desktop or Start Menu to play. You can now close this window."
